@@ -20,7 +20,7 @@ class App():
 
     def load_ui(self, ui_file : str) -> Type[QWidget]:
         path = Path().absolute()
-        path = join(path, 'qtbsoundtable', "layouts", "")
+        path = join(path, "layouts", "")
         ui_file = QFile(f'{path}{ui_file}')
         ui_file.open(QFile.ReadOnly)
         loader = QUiLoader()
