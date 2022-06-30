@@ -25,15 +25,19 @@ class AddSongs(AddSongsInterface):
 
         songs_to_add : List[List[str]] = []
         
+        id = self.private__get_last_id_json(json_path) + 1
+
         for song in self.__paths:
             copy(song, path)
             songs_to_add.append(
                 [
+                    id, # Id
                     song.split('/')[-1], # Name
                     '', # Shortcut
                     False # Loop
                 ]
             )
+            id += 1
 
         self.private__write_json(json_path, songs_to_add)
 
@@ -43,7 +47,7 @@ class AddSongs(AddSongsInterface):
         songs_to_add : List[List[str]]) -> None:
 
         with open(json_path, 'r') as f:
-            try :
+            try:
                 original_json : dict = load(f)
             except JSONDecodeError:
                 original_json = {'songs': []}
@@ -51,7 +55,7 @@ class AddSongs(AddSongsInterface):
         with open(json_path, 'w') as f:
 
             original_songs : List[
-                List[str, str, bool]
+                List[str]
             ] = original_json['songs']
 
             for song in songs_to_add:
@@ -65,3 +69,13 @@ class AddSongs(AddSongsInterface):
             f.write('')
 
             f.write(dumps(new_json))
+
+    def private__get_last_id_json(self, json_path: str) -> int:
+        # Get last id to add id in json
+        with open(json_path, 'r') as f:
+            try:
+                original_json : dict = load(f)
+            except JSONDecodeError:
+                return -1
+
+            return len(original_json["songs"]) - 1
