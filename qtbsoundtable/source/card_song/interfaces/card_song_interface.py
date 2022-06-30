@@ -1,10 +1,11 @@
 from abc import ABC, abstractmethod
 from typing import Type, List
-from PySide6.QtWidgets import QGridLayout
+from PySide6.QtWidgets import QGridLayout, QMainWindow
 
 class CardSongInterface(ABC):
     @abstractmethod
-    def __init__(self, id : int, song_name : str, short_cuts : List[str]) \
+    def __init__(self, id : int, song_name : str, \
+        short_cuts : List[str], window : Type[QMainWindow]) \
         -> None:
         """Init
 

@@ -1,17 +1,21 @@
 from typing import List, Type
-from PySide6.QtWidgets import QWidget, QGridLayout, QLabel, QPushButton, QComboBox
+from PySide6.QtWidgets import QWidget, QGridLayout, \
+    QLabel, QPushButton, QComboBox, QMainWindow
 from PySide6.QtCore import QRect
 
 from .interfaces import CardSongInterface
 
 class CardSong(CardSongInterface):
-    def __init__(self, id: int, song_name: str, short_cuts: List[str]) -> None:
+    def __init__(self, id: int, song_name: str, \
+        short_cuts: List[str], window: Type[QMainWindow]) -> None:
+
         self.__id = str(id)
         self.__song_name = song_name
         self.__short_cuts = (*short_cuts, )
+        self.__window = window
 
     def create_card_song(self) -> Type[QGridLayout]:
-        gridLayoutWidget = QWidget()
+        gridLayoutWidget = QWidget(self.__window)
         gridLayoutWidget.setObjectName(r"gridLayoutWidget")
         gridLayoutWidget.setGeometry(QRect(130, 50, 299, 219))
 
@@ -45,7 +49,9 @@ class CardSong(CardSongInterface):
         
         gridLayout.addWidget(comboBox, 2, 1, 1, 1)
         gridLayout.addWidget(song_name, 1, 0, 1, 2)
-        gridLayout.addWidget(short_cut_label, 1, 0, 1, 2)
+        gridLayout.addWidget(short_cut_label, 2, 0, 1, 1)
         gridLayout.addWidget(play_button, 3, 0, 1, 2)
+
+        print(f"Card Created + {gridLayout}")
 
         return gridLayout
