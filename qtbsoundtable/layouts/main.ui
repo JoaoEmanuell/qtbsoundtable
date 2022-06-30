@@ -31,7 +31,7 @@
        </property>
        <layout class="QVBoxLayout" name="verticalLayout_2">
         <item>
-         <layout class="QVBoxLayout" name="sounds_box_layout"/>
+         <layout class="QVBoxLayout" name="soundsBoxLayout"/>
         </item>
        </layout>
       </widget>
@@ -78,12 +78,12 @@
     <property name="title">
      <string>Menu</string>
     </property>
-    <addaction name="actionAdicionar_sons"/>
+    <addaction name="actionAddSounds"/>
    </widget>
    <addaction name="menuMenu"/>
   </widget>
   <widget class="QStatusBar" name="statusbar"/>
-  <action name="actionAdicionar_sons">
+  <action name="actionAddSounds">
    <property name="text">
     <string>Adicionar sons</string>
    </property>
