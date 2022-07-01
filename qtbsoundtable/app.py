@@ -3,9 +3,9 @@ from pathlib import Path
 from os.path import join, exists
 
 from PySide6.QtWidgets import QApplication, QWidget, QFileDialog, \
-    QVBoxLayout, QScrollArea
+    QHBoxLayout, QScrollArea
 from PySide6.QtUiTools import QUiLoader
-from PySide6.QtCore import QFile, Qt
+from PySide6.QtCore import QFile
 
 from source import Factory
 from source.factory.interfaces import FactoryInterface
@@ -68,14 +68,16 @@ class App():
 
         box_layout = scroll_area_widget.layout()
 
-        for i in range(1, 10):
+        horizontal_layout = QHBoxLayout()
+
+        for i in range(0, 101):
 
             card_song_class : CardSongInterface = \
                 self.__factory.get_representative(CardSongInterface)(
-                    1, 
-                    'Test',
-                    ['1', '2', str(i)],
-                    scroll_area_widget
+                    id = 1, 
+                    song_name = f'Test : {i + 1}',
+                    short_cuts = ['1', '2', f'{i + 1}'],
+                    window = scroll_area_widget
                 )
 
             card = card_song_class.create_card_song()
@@ -84,7 +86,23 @@ class App():
 
             card_widget.setLayout(card)
 
-            box_layout.addWidget(card_widget)
+            horizontal_layout.addWidget(card_widget)
+
+            if ((i + 1) % 5) == 0:
+
+                horizontal_layout_widget = QWidget()
+
+                horizontal_layout_widget.setLayout(horizontal_layout)
+
+                box_layout.addWidget(horizontal_layout_widget)
+
+                horizontal_layout = QHBoxLayout()
+
+        horizontal_layout_widget = QWidget()
+
+        horizontal_layout_widget.setLayout(horizontal_layout)
+
+        box_layout.addWidget(horizontal_layout_widget)
 
     def play_song(self) -> None:
         pass
