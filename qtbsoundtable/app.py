@@ -2,13 +2,15 @@ from typing import Type, List
 from pathlib import Path
 from os.path import join, exists
 
-from PySide6.QtWidgets import QApplication, QWidget, QFileDialog
+from PySide6.QtWidgets import QApplication, QWidget, QFileDialog, \
+    QVBoxLayout, QScrollArea
 from PySide6.QtUiTools import QUiLoader
-from PySide6.QtCore import QFile
+from PySide6.QtCore import QFile, Qt
 
 from source import Factory
 from source.factory.interfaces import FactoryInterface
 from source.add_songs.interfaces import AddSongsInterface
+from source.card_song.interfaces import CardSongInterface
 
 class App():
     def __init__(self, factory : Type[FactoryInterface]) -> None:
@@ -59,6 +61,30 @@ class App():
 
     def load_songs_in_screen(self) -> None:
         self.__main_form.show()
+
+        scroll_area : QScrollArea = self.__main_form.scrollArea
+
+        scroll_area_widget = scroll_area.widget()
+
+        box_layout = scroll_area_widget.layout()
+
+        for i in range(1, 10):
+
+            card_song_class : CardSongInterface = \
+                self.__factory.get_representative(CardSongInterface)(
+                    1, 
+                    'Test',
+                    ['1', '2', str(i)],
+                    scroll_area_widget
+                )
+
+            card = card_song_class.create_card_song()
+
+            card_widget = QWidget()
+
+            card_widget.setLayout(card)
+
+            box_layout.addWidget(card_widget)
 
     def play_song(self) -> None:
         pass
