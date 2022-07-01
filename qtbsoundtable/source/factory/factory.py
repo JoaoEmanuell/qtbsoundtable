@@ -2,13 +2,13 @@ from typing import Tuple, Type
 from abc import ABC
 
 from .interfaces import FactoryInterface
-from ..add_songs import AddSongs
+from ..songs_json_manipulation import SongsJsonManipulation
 from ..card_song import CardSong
 
 class Factory(FactoryInterface):
     def __init__(self) -> None:
         self.__representatives : Tuple[ABC] = (
-            AddSongs,
+            SongsJsonManipulation,
             CardSong,
         )
 

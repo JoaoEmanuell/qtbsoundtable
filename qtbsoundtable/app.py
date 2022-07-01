@@ -9,7 +9,7 @@ from PySide6.QtCore import QFile
 
 from source import Factory
 from source.factory.interfaces import FactoryInterface
-from source.add_songs.interfaces import AddSongsInterface
+from source.songs_json_manipulation.interfaces import SongsJsonManipulationInterface
 from source.card_song.interfaces import CardSongInterface
 
 class App():
@@ -49,8 +49,8 @@ class App():
             filter = "Music Files (*.mp3 *.wav)",
         )[0]
 
-        add_songs_class : AddSongsInterface = self.__factory.get_representative(
-            AddSongsInterface
+        add_songs_class : SongsJsonManipulationInterface = self.__factory.get_representative(
+            SongsJsonManipulationInterface
         )(paths, self.__absolute_path)
 
         add_songs_class.add_songs()

@@ -5,9 +5,9 @@ from os.path import exists, join
 from json import load, dumps
 from json.decoder import JSONDecodeError
 
-from .interfaces import AddSongsInterface
+from .interfaces import SongsJsonManipulationInterface
 
-class AddSongs(AddSongsInterface):
+class SongsJsonManipulation(SongsJsonManipulationInterface):
     def __init__(self, paths: List[str], absolute_path: str) -> None:
         self.__paths = (*paths, )
         self.__absolute_path = absolute_path
