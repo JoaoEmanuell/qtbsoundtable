@@ -70,13 +70,21 @@ class App():
 
         horizontal_layout = QHBoxLayout()
 
-        for i in range(0, 101):
+        get_songs_class : SongsJsonManipulationInterface = \
+            self.__factory.get_representative(SongsJsonManipulationInterface)(
+                [], 
+                self.__absolute_path
+            )
+
+        songs = (*get_songs_class.get_songs(), )
+
+        for i, song in enumerate(songs):
 
             card_song_class : CardSongInterface = \
                 self.__factory.get_representative(CardSongInterface)(
-                    id = 1, 
-                    song_name = f'Test : {i + 1}',
-                    short_cuts = ['1', '2', f'{i + 1}'],
+                    id = song[0], 
+                    song_name = song[1],
+                    short_cuts = ['1', '2', '3', '4', '5'],
                     window = scroll_area_widget
                 )
 
@@ -88,7 +96,7 @@ class App():
 
             horizontal_layout.addWidget(card_widget)
 
-            if ((i + 1) % 5) == 0:
+            if ((i + 1) % 3) == 0: # 3 cards per row
 
                 horizontal_layout_widget = QWidget()
 
