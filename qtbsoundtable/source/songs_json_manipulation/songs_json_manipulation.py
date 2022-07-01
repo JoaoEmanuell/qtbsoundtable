@@ -1,4 +1,4 @@
-from typing import List, Union
+from typing import List, Union, Dict
 from shutil import copy
 from os import mkdir
 from os.path import exists, join
@@ -81,4 +81,11 @@ class SongsJsonManipulation(SongsJsonManipulationInterface):
             return len(original_json["songs"]) - 1
 
     def get_songs(self) -> List[List[Union[int, str, bool]]]:
-        pass
+        songs_path = join(self.__absolute_path, 'songs.json')
+
+        if not exists(songs_path):
+            raise FileNotFoundError("songs.json not found")
+
+        with open(songs_path, 'r') as file:
+            json : Dict[str, List] = load(file)
+            return json['songs']
