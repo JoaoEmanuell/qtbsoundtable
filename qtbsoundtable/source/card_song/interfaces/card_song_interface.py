@@ -1,6 +1,6 @@
 from abc import ABC, abstractmethod
 from typing import Type, List
-from PySide6.QtWidgets import QGridLayout, QMainWindow
+from PySide6.QtWidgets import QFrame, QMainWindow
 
 class CardSongInterface(ABC):
     @abstractmethod
@@ -13,7 +13,7 @@ class CardSongInterface(ABC):
         raise NotImplementedError()
 
     @abstractmethod
-    def create_card_song(self) -> Type[QGridLayout]:
+    def create_card_song(self) -> Type[QFrame]:
         """Create card song
 
         Returns:

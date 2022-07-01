@@ -1,6 +1,6 @@
 from typing import List, Type
 from PySide6.QtWidgets import QWidget, QGridLayout, \
-    QLabel, QPushButton, QComboBox, QMainWindow
+    QLabel, QPushButton, QComboBox, QMainWindow, QFrame
 from PySide6.QtCore import QRect
 
 from .interfaces import CardSongInterface
@@ -14,34 +14,37 @@ class CardSong(CardSongInterface):
         self.__short_cuts = (*short_cuts, )
         self.__window = window
 
-    def create_card_song(self) -> Type[QGridLayout]:
+    def create_card_song(self) -> Type[QFrame]:
         gridLayoutWidget = QWidget(self.__window)
         gridLayoutWidget.setObjectName(r"gridLayoutWidget")
         gridLayoutWidget.setGeometry(QRect(130, 50, 299, 219))
 
-        gridLayout = QGridLayout(gridLayoutWidget)
+        gridFrame = QFrame(gridLayoutWidget)
+        gridFrame.setStyleSheet(self.private__get_style_sheet())
+        gridFrame.setContentsMargins(0, 0, 0, 0)
+
+        gridLayout = QGridLayout(gridFrame)
         gridLayout.setObjectName(r"gridLayout")
-        gridLayout.setContentsMargins(0, 0, 0, 0)
 
         # Combo Box | Short cuts
 
-        comboBox = QComboBox(gridLayoutWidget)
+        comboBox = QComboBox(gridFrame)
         comboBox.setObjectName(r"shortCuts")
         comboBox.addItems([*self.__short_cuts])
 
         # Song name
 
-        song_name = QLabel(gridLayoutWidget)
+        song_name = QLabel(gridFrame)
         song_name.setText(self.__song_name)
 
         # Shortcut label
 
-        short_cut_label = QLabel(gridLayoutWidget)
+        short_cut_label = QLabel(gridFrame)
         short_cut_label.setText(r"Atalho : ")
 
         # Play button
 
-        play_button = QPushButton(gridLayoutWidget)
+        play_button = QPushButton(gridFrame)
         play_button.setText(r"Play")
         play_button.setObjectName(self.__id)
 
@@ -54,4 +57,17 @@ class CardSong(CardSongInterface):
 
         print(f"Card Created + {gridLayout}")
 
-        return gridLayout
+        return gridFrame
+
+    def private__get_style_sheet(self) -> str:
+        qss = (u"QFrame {\n"
+                "border-width: 1;\n"
+                "border-radius: 5;\n"
+                "border-style: solid;\n"
+                "border-color: rgb(10, 10, 10)\n"
+                "}\n"
+                "\n"
+                "QLabel {\n"
+                "border-width: 0;\n"
+                "}")
+        return qss

@@ -90,11 +90,7 @@ class App():
 
             card = card_song_class.create_card_song()
 
-            card_widget = QWidget()
-
-            card_widget.setLayout(card)
-
-            horizontal_layout.addWidget(card_widget)
+            horizontal_layout.addWidget(card)
 
             if ((i + 1) % 3) == 0: # 3 cards per row
 
