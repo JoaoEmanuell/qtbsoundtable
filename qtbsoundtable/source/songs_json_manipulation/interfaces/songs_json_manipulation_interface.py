@@ -1,5 +1,5 @@
 from abc import ABC, abstractmethod
-from typing import List
+from typing import List, Union
 
 class SongsJsonManipulationInterface(ABC):
     @abstractmethod
@@ -18,3 +18,16 @@ class SongsJsonManipulationInterface(ABC):
 
         """        
         raise NotImplementedError()
+
+    @abstractmethod
+    def get_songs(self) -> List[List[Union[int, str, bool]]]:
+        """Get songs from songs.json
+
+        Raises:
+            FileNotFoundError: Case songs.json don't exist
+
+        Returns:
+            List[List[Union[int, str, bool]]]: Songs from songs.json
+        """         
+        raise NotImplementedError()
+        raise FileNotFoundError()

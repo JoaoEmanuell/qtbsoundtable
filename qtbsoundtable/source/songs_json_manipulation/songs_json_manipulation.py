@@ -1,4 +1,4 @@
-from typing import List
+from typing import List, Union
 from shutil import copy
 from os import mkdir
 from os.path import exists, join
@@ -79,3 +79,6 @@ class SongsJsonManipulation(SongsJsonManipulationInterface):
                 return -1
 
             return len(original_json["songs"]) - 1
+
+    def get_songs(self) -> List[List[Union[int, str, bool]]]:
+        pass
