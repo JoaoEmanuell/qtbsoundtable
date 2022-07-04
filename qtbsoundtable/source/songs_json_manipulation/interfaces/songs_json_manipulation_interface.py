@@ -3,7 +3,7 @@ from typing import List, Union
 
 class SongsJsonManipulationInterface(ABC):
     @abstractmethod
-    def __init__(self, paths : List[str], absolute_path : str) -> None:
+    def __init__(self, paths: List[str]=[], absolute_path: str='') -> None:
         """Init
 
         Args:
@@ -29,5 +29,21 @@ class SongsJsonManipulationInterface(ABC):
         Returns:
             List[List[Union[int, str, bool]]]: Songs from songs.json
         """         
+        raise NotImplementedError()
+        raise FileNotFoundError()
+
+    @abstractmethod
+    def get_song(self, id: str) -> str:
+        """Get song
+
+        Args:
+            id (str): Id from song, get this information in songs.json
+
+        Raises:
+            FileNotFoundError: Case the song not exists
+
+        Returns:
+            str: Absolute path to the song
+        """        
         raise NotImplementedError()
         raise FileNotFoundError()
