@@ -12,19 +12,6 @@ class SongsConfigureInterface(ABC):
 
         """        
         raise NotImplementedError()
-        
-    @abstractmethod
-    def get_all_songs(self) -> List[List[str]]:
-        """Get all songs from songs.json
-
-        Raises:
-            FileNotFoundError: Case the songs.json file does not exist
-
-        Returns:
-            List[List[str]]: Data matrix of all songs, format : [Id, Name, Shortcut, Loop]
-        """        
-        raise NotImplementedError()
-        raise FileNotFoundError()
 
     @abstractmethod
     def play_song(self, id: int, loop: bool) -> None:
@@ -39,3 +26,8 @@ class SongsConfigureInterface(ABC):
         """        
         raise NotImplementedError()
         raise FileNotFoundError()
+
+    @abstractmethod
+    def stop_song(self) -> None:
+        """Stop a song"""        
+        raise NotImplementedError()
