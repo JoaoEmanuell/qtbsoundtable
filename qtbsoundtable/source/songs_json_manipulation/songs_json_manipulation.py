@@ -8,7 +8,7 @@ from json.decoder import JSONDecodeError
 from .interfaces import SongsJsonManipulationInterface
 
 class SongsJsonManipulation(SongsJsonManipulationInterface):
-    def __init__(self, paths: List[str], absolute_path: str) -> None:
+    def __init__(self, paths: List[str]=[], absolute_path: str='') -> None:
         self.__paths = (*paths, )
         self.__absolute_path = absolute_path
 
@@ -89,3 +89,16 @@ class SongsJsonManipulation(SongsJsonManipulationInterface):
         with open(songs_path, 'r') as file:
             json : Dict[str, List] = load(file)
             return json['songs']
+
+    def get_song(self, id: str) -> str:
+        songs = self.get_songs()
+
+        for song in songs:
+
+            if song[0] == int(id):
+                song_path = str(join(self.__absolute_path, 'songs', song[1]))
+
+                if not exists(song_path):
+                    raise FileNotFoundError("Song not found")
+
+                return song_path
