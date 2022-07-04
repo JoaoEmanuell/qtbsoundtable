@@ -4,15 +4,24 @@ from PySide6.QtWidgets import QWidget, QGridLayout, \
 from PySide6.QtCore import QRect
 
 from .interfaces import CardSongInterface
+from ..songs_configure.interfaces import SongsConfigureInterface
+from ..songs_json_manipulation.interfaces import SongsJsonManipulationInterface
 
 class CardSong(CardSongInterface):
     def __init__(self, id: int, song_name: str, \
-        short_cuts: List[str], window: Type[QMainWindow]) -> None:
+        short_cuts: List[str], window: Type[QMainWindow],
+        absolute_path: str,
+        play_song: Type[SongsConfigureInterface],
+        songs_json_manipulation: Type[SongsJsonManipulationInterface]
+        ) -> None:
 
         self.__id = str(id)
         self.__song_name = song_name
         self.__short_cuts = (*short_cuts, )
         self.__window = window
+        # Play song and songs json... dependencies
+
+        self.__play_song = play_song(absolute_path, songs_json_manipulation)
 
     def create_card_song(self) -> Type[QFrame]:
         gridLayoutWidget = QWidget(self.__window)
@@ -47,6 +56,7 @@ class CardSong(CardSongInterface):
         play_button = QPushButton(gridFrame)
         play_button.setText(r"Play")
         play_button.setObjectName(self.__id)
+        play_button.clicked.connect(self.private__play_song)
 
         # Add in grid
         
@@ -71,3 +81,7 @@ class CardSong(CardSongInterface):
                 "border-width: 0;\n"
                 "}")
         return qss
+
+    def private__play_song(self) -> None:
+        id = self.sender().objectName()
+        self.__play_song.play_song(id, False)
