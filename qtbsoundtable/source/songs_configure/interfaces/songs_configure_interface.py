@@ -1,10 +1,16 @@
 from abc import ABC, abstractmethod
-from typing import List
+from typing import Type
+
+from ...songs_json_manipulation.interfaces import SongsJsonManipulationInterface
 
 class SongsConfigureInterface(ABC):
     """Songs configure, get all songs from json, play song."""    
     @abstractmethod
-    def __init__(self, absolute_path: str) -> None:
+    def __init__(
+        self, 
+        absolute_path: str, 
+        songs_json_manipulation : Type[SongsJsonManipulationInterface]
+        ) -> None:
         """Init
 
         Args:
