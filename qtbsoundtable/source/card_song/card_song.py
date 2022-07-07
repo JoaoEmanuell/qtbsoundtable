@@ -1,27 +1,22 @@
 from typing import List, Type
-from PySide6.QtWidgets import QWidget, QGridLayout, \
-    QLabel, QPushButton, QComboBox, QMainWindow, QFrame
+from PySide6.QtWidgets import (QWidget, QGridLayout, QLabel, QPushButton, 
+QComboBox, QMainWindow, QFrame)
 from PySide6.QtCore import QRect
 
 from .interfaces import CardSongInterface
 from ..songs_configure.interfaces import SongsConfigureInterface
-from ..songs_json_manipulation.interfaces import SongsJsonManipulationInterface
 
 class CardSong(CardSongInterface):
     def __init__(self, id: int, song_name: str, \
         short_cuts: List[str], window: Type[QMainWindow],
-        absolute_path: str,
-        play_song: Type[SongsConfigureInterface],
-        songs_json_manipulation: Type[SongsJsonManipulationInterface]
+        play_song: Type[SongsConfigureInterface]
         ) -> None:
 
         self.__id = str(id)
         self.__song_name = song_name
         self.__short_cuts = (*short_cuts, )
         self.__window = window
-        # Play song and songs json... dependencies
-
-        self.__play_song = play_song(absolute_path, songs_json_manipulation)
+        self.__play_song = play_song
 
     def create_card_song(self) -> Type[QFrame]:
         gridLayoutWidget = QWidget(self.__window)
@@ -55,8 +50,9 @@ class CardSong(CardSongInterface):
 
         play_button = QPushButton(gridFrame)
         play_button.setText(r"Play")
-        play_button.setObjectName(self.__id)
-        play_button.clicked.connect(self.private__play_song)
+        play_button.clicked.connect(
+            lambda: self.play_song(self.__id, play_button) # Pass parameters for play_song
+        )
 
         # Add in grid
         
@@ -64,8 +60,6 @@ class CardSong(CardSongInterface):
         gridLayout.addWidget(song_name, 1, 0, 1, 2)
         gridLayout.addWidget(short_cut_label, 2, 0, 1, 1)
         gridLayout.addWidget(play_button, 3, 0, 1, 2)
-
-        print(f"Card Created + {gridLayout}")
 
         return gridFrame
 
@@ -82,6 +76,12 @@ class CardSong(CardSongInterface):
                 "}")
         return qss
 
-    def private__play_song(self) -> None:
-        id = self.sender().objectName()
-        self.__play_song.play_song(id, False)
+    def play_sound_event_button(self, id: str, button : Type[QPushButton]) -> None:
+        button_text = button.text()
+        print(f'Play Song card : {id}')
+        if button_text == 'Play':
+            self.__play_song.play_song(id, False)
+            button.setText('Pause')
+        else:
+            self.__play_song.stop_song()
+            button.setText('Play')
