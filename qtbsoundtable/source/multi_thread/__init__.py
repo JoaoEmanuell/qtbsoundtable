@@ -1,2 +1,2 @@
-from .multi_thread_error import MultiThreadError
+from .interfaces import MultiThreadInterface
 from .singleton import MultiThreadClass

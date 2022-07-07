@@ -5,6 +5,7 @@ from .interfaces import FactoryInterface
 from ..songs_json_manipulation import SongsJsonManipulation
 from ..card_song import CardSong
 from ..songs_configure import SongsConfigure
+from ..multi_thread import MultiThreadClass
 
 class Factory(FactoryInterface):
     def __init__(self) -> None:
@@ -12,6 +13,7 @@ class Factory(FactoryInterface):
             SongsJsonManipulation,
             CardSong,
             SongsConfigure,
+            MultiThreadClass,
         )
 
     def get_representative(self, interface: Type[ABC]) -> Type[ABC]:
