@@ -2,18 +2,22 @@ from typing import Type, List
 from pathlib import Path
 from os.path import join, exists
 
-from PySide6.QtWidgets import QApplication, QWidget, QFileDialog, \
-    QHBoxLayout, QScrollArea
+from PySide6.QtWidgets import (QApplication, QWidget, QFileDialog, 
+QHBoxLayout, QScrollArea)
 from PySide6.QtUiTools import QUiLoader
 from PySide6.QtCore import QFile
 
 from source import Factory
 from source.factory.interfaces import FactoryInterface
-from source.songs_json_manipulation.interfaces import SongsJsonManipulationInterface
+from source.songs_json_manipulation.interfaces import (
+    SongsJsonManipulationInterface
+)
 from source.card_song.interfaces import CardSongInterface
+from source.songs_configure.interfaces import SongsConfigureInterface
 
 class App():
     def __init__(self, factory : Type[FactoryInterface]) -> None:
+        
         self.__app = QApplication([])
         self.__factory = factory()
         self.__absolute_path = Path().absolute()
@@ -76,6 +80,12 @@ class App():
                 self.__absolute_path
             )
 
+        play_song_class : SongsConfigureInterface = \
+            self.__factory.get_representative(SongsConfigureInterface)(
+                self.__absolute_path,
+                get_songs_class
+            )
+
         songs = (*get_songs_class.get_songs(), )
 
         for i, song in enumerate(songs):
@@ -85,7 +95,8 @@ class App():
                     id = song[0], 
                     song_name = song[1],
                     short_cuts = ['1', '2', '3', '4', '5'],
-                    window = scroll_area_widget
+                    window = scroll_area_widget,
+                    play_song = play_song_class
                 )
 
             card = card_song_class.create_card_song()
