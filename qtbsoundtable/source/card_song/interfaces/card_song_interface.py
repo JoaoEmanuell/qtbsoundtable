@@ -1,17 +1,14 @@
 from abc import ABC, abstractmethod
 from typing import Type, List
-from PySide6.QtWidgets import QFrame, QMainWindow
+from PySide6.QtWidgets import QFrame, QMainWindow, QPushButton
 
 from ...songs_configure.interfaces import SongsConfigureInterface
-from ...songs_json_manipulation.interfaces import SongsJsonManipulationInterface
 
 class CardSongInterface(ABC):
     @abstractmethod
     def __init__(self, id : int, song_name : str, \
         short_cuts : List[str], window : Type[QMainWindow],
-        absolute_path: str,
         play_song: Type[SongsConfigureInterface],
-        songs_json_manipulation: Type[SongsJsonManipulationInterface]
         ) -> None:
         """Init
 
@@ -24,5 +21,16 @@ class CardSongInterface(ABC):
 
         Returns:
             Type[QGridLayout]: Grind Layout contain a card song
+        """        
+        raise NotImplementedError()
+
+    @abstractmethod
+    def play_sound_event_button(self, id:str, button:Type[QPushButton]) \
+        -> None:
+        """Play sound event button
+        
+        Args:
+            id (str): Id of song
+            button (Type[QPushButton]): Button to play song
         """        
         raise NotImplementedError()
