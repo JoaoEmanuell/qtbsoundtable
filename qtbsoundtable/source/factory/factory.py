@@ -18,6 +18,11 @@ class Factory(FactoryInterface):
 
     def get_representative(self, interface: Type[ABC]) -> Type[ABC]:
         for representative in self.__representatives:
-            if issubclass(representative, interface):
-                return representative
+            try:
+                if issubclass(representative, interface):
+                    return representative
+            except TypeError:
+                if isinstance(representative, interface):
+                    return representative
+
         raise ValueError(f"No representative found for interface: {interface}")
