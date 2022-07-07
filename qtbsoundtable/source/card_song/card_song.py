@@ -51,7 +51,8 @@ class CardSong(CardSongInterface):
         play_button = QPushButton(gridFrame)
         play_button.setText(r"Play")
         play_button.clicked.connect(
-            lambda: self.play_song(self.__id, play_button) # Pass parameters for play_song
+            lambda: self.play_sound_event_button(self.__id, play_button) 
+            # Pass parameters for play_song
         )
 
         # Add in grid
@@ -81,7 +82,7 @@ class CardSong(CardSongInterface):
         print(f'Play Song card : {id}')
         if button_text == 'Play':
             self.__play_song.play_song(id, False)
-            button.setText('Pause')
+            button.setText('Stop')
         else:
             self.__play_song.stop_song()
             button.setText('Play')
