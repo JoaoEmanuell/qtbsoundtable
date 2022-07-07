@@ -11,7 +11,7 @@ class MultiThreadInterface(ABC):
         """Init
 
         Args:
-            thread_number_limit (int, optional): Concurrent thread limit. Defaults to 10.
+            thread_number_limit (int, optional): Concurrent thread limit, if the limit is reached all threads break and erro is emitted. Defaults to 10.
             error_class (Type[MultiThreadErrorInterface]): Error class, for emit erros.
 
         """        
@@ -21,7 +21,7 @@ class MultiThreadInterface(ABC):
         self, 
         target: Callable=None,
         args: Iterable[Any]=(),
-        kwargs: Mapping[str, Any]={},
+        kwargs: Mapping[str, Any]=None,
         automatic_start: bool=True
         ) -> int:
         """_summary_
