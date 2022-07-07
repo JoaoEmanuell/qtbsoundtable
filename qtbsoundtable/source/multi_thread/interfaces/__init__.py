@@ -1,2 +1,1 @@
 from .multi_thread_interface import MultiThreadInterface
-from .multi_thread_error_interface import MultiThreadErrorInterface

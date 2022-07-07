@@ -1,14 +1,12 @@
 from abc import ABC, abstractmethod
 from typing import Callable, Iterable, Mapping, Any, Type
 
-from .multi_thread_error_interface import MultiThreadErrorInterface
-
 class MultiThreadInterface(ABC):
     @abstractmethod
     def __init__(
         self, 
         thread_number_limit:int=10,
-        error_class: Type[MultiThreadErrorInterface]=None
+        error_class: Type[Exception]=None
         ) -> None:
         """Init
 
