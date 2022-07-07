@@ -1,9 +1,9 @@
-from typing import Type, List
+from typing import Type, List, Union
 from pathlib import Path
 from os.path import join, exists
 
 from PySide6.QtWidgets import (QApplication, QWidget, QFileDialog, 
-QHBoxLayout, QScrollArea)
+QHBoxLayout, QScrollArea, QLayout)
 from PySide6.QtUiTools import QUiLoader
 from PySide6.QtCore import QFile
 
@@ -105,19 +105,18 @@ class App():
 
             if ((i + 1) % 3) == 0: # 3 cards per row
 
-                horizontal_layout_widget = QWidget()
-
-                horizontal_layout_widget.setLayout(horizontal_layout)
-
-                box_layout.addWidget(horizontal_layout_widget)
-
+                box_layout.addWidget(self.__add_layout(horizontal_layout))
                 horizontal_layout = QHBoxLayout()
 
+        box_layout.addWidget(self.__add_layout(horizontal_layout))
+
+    def __add_layout(self, horizontal_layout : Type[QHBoxLayout]) \
+        -> Type[QWidget]:
+        # Return : QWidget is a widget containing the horizontal layout
+        
         horizontal_layout_widget = QWidget()
-
         horizontal_layout_widget.setLayout(horizontal_layout)
-
-        box_layout.addWidget(horizontal_layout_widget)
+        return horizontal_layout_widget
 
     def play_song(self) -> None:
         pass
