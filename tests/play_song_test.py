@@ -13,6 +13,7 @@ from qtbsoundtable.source.songs_json_manipulation.interfaces import (
 from qtbsoundtable.source.songs_configure.interfaces import (
     SongsConfigureInterface
 )
+from qtbsoundtable.source.multi_thread import MultiThreadInterface
 
 def test_answer():
     fac = Factory()
@@ -23,20 +24,25 @@ def test_answer():
             absolute_path = absolute_path
         )
 
+    multi_thread : MultiThreadInterface \
+        = fac.get_representative(MultiThreadInterface)
+
     songs_configure_class : SongsConfigureInterface = \
         fac.get_representative(SongsConfigureInterface)(
             absolute_path = absolute_path,
-            songs_json_manipulation = songs_json_manipulation
+            songs_json_manipulation = songs_json_manipulation,
+            thread_manipulation = multi_thread
         )
 
-    Thread(target=stop_song, args=(songs_configure_class, 3)).start()
 
-    songs_configure_class.play_song(id=0, loop=False)
+    thread_id = songs_configure_class.play_song(id=0, loop=False)
+    print(thread_id)
+    stop_song(songs_configure_class, time=10, thread_id=thread_id)
 
-def stop_song(songs_configure : Type[SongsConfigureInterface], time : int = 5):
+def stop_song(songs_configure : Type[SongsConfigureInterface], time : int = 5, thread_id: int=0):
     sleep(time)
     print("Stope song thread!")
-    songs_configure.stop_song()
+    songs_configure.stop_song(thread_id)
     print("Stop song!")
 
 if __name__ == '__main__':
