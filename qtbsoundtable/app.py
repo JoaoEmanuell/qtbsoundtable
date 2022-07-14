@@ -1,19 +1,19 @@
-from typing import Type, List, Union
+from typing import Type, List
 from pathlib import Path
 from os.path import join, exists
 
 from PySide6.QtWidgets import (QApplication, QWidget, QFileDialog, 
-QHBoxLayout, QScrollArea, QLayout)
+QHBoxLayout, QScrollArea)
 from PySide6.QtUiTools import QUiLoader
 from PySide6.QtCore import QFile
 
 from source import Factory
-from source.factory.interfaces import FactoryInterface
-from source.songs_json_manipulation.interfaces import (
-    SongsJsonManipulationInterface
-)
-from source.card_song.interfaces import CardSongInterface
-from source.songs_configure.interfaces import SongsConfigureInterface
+
+from source.factory import FactoryInterface
+from source.songs_json_manipulation import SongsJsonManipulationInterface
+from source.card_song import CardSongInterface
+from source.songs_configure import SongsConfigureInterface
+from source.multi_thread import MultiThreadInterface
 
 class App():
     def __init__(self, factory : Type[FactoryInterface]) -> None:
@@ -32,6 +32,11 @@ class App():
         self.__main_form = self.load_ui('main.ui')
         self.__main_form.playSongsButton.clicked.connect(self.play_song)
         self.__main_form.actionAddSounds.triggered.connect(self.__add_songs)
+
+        # Multi Thread
+
+        self.__multi_thread : MultiThreadInterface = \
+            self.__factory.get_representative(MultiThreadInterface)
 
         if not exists(join(self.__absolute_path, 'songs.json')):
             self.__add_form.show()
@@ -83,7 +88,8 @@ class App():
         play_song_class : SongsConfigureInterface = \
             self.__factory.get_representative(SongsConfigureInterface)(
                 self.__absolute_path,
-                get_songs_class
+                get_songs_class,
+                self.__multi_thread
             )
 
         songs = (*get_songs_class.get_songs(), )
