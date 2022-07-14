@@ -20,21 +20,13 @@ class MultiThread(MultiThreadInterface):
         if kwargs is None:
             kwargs = {}
         
-        pr = Process(target=target, args=args, kwargs=kwargs)
+        process = Process(target=target, args=args, kwargs=kwargs)
         id = randint(1, 100000000)
 
-        if not id in self.__process:
-            self.__process[id] = (pr, target, args, kwargs)
+        self.__process[id] = (process, target, args, kwargs)
 
         if automatic_start:
-            if self.private__verify_running_threads_number == \
-                self.__thread_number_limit:
-
-                self.private__stop_all_threads()
-                raise self.__error_class("Limit of Threads reached")
-
-            else:
-                self.start_thread(id)
+            self.start_thread(id)
 
         return id
     
@@ -66,8 +58,8 @@ class MultiThread(MultiThreadInterface):
 
     def stop_thread(self, id: int) -> None:
         try:
-            pr = self.__process[id][0]
-            pr.terminate()
+            process = self.__process[id][0]
+            process.terminate()
         except KeyError:
             raise self.__error_class("Thread not found")
         except (RuntimeError, AttributeError):
@@ -75,12 +67,13 @@ class MultiThread(MultiThreadInterface):
 
     def is_alive(self, id: int) -> bool:
         try:
-            pr = self.__process[id][0]
-            return pr.is_alive()
+            process = self.__process[id][0]
+            return process.is_alive()
         except KeyError:
             raise self.__error_class("Thread not found")
 
     def private__verify_running_threads_number(self) -> int:
+        # Return the number of running threads simultaneously
         number = 1
 
         for id, _ in self.__process.items():
@@ -93,12 +86,11 @@ class MultiThread(MultiThreadInterface):
         print("Alert: Max Threads Reached!!!\nStop all threads!!!")
         while True:
 
-            if len(self.__process) == 0:
+            if self.private__verify_running_threads_number() == 1:
                 break
 
             try:
                 for id, _ in self.__process.items():
                     self.stop_thread(id)
-                    self.delete_thread(id)
             except RuntimeError:
                 pass
