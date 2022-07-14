@@ -1,1 +1,2 @@
 from .songs_configure import SongsConfigure
+from .interfaces import SongsConfigureInterface
