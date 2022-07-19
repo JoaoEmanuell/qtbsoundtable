@@ -35,21 +35,22 @@ class App():
         self.__main_form.playSongsButton.clicked.connect(self.play_song)
         self.__main_form.actionAddSounds.triggered.connect(self.__add_songs)
 
+        # Class
+
         # Multi Thread
 
         self.__multi_thread : MultiThreadInterface = \
             self.__factory.get_representative(MultiThreadInterface)
 
-        if not self.__verify_songs_json():
-            self.__add_form.show()
-        else:
-            self.load_songs_in_screen()
+        # Get songs
 
         self.__get_songs_class : SongsJsonManipulationInterface = \
             self.__factory.get_representative(SongsJsonManipulationInterface)(
                 [], 
                 self.__absolute_path
             )
+
+        # Play song
 
         self.__play_song_class : SongsConfigureInterface = \
             self.__factory.get_representative(SongsConfigureInterface)(
@@ -58,6 +59,11 @@ class App():
                 self.__multi_thread
             )
 
+        if not self.__verify_songs_json():
+            self.__add_form.show()
+        else:
+            self.load_songs_in_screen()
+        
         self.__app.exec()
 
     def load_ui(self, ui_file : str) -> Type[QWidget]:
