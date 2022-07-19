@@ -45,6 +45,19 @@ class App():
         else:
             self.load_songs_in_screen()
 
+        self.__get_songs_class : SongsJsonManipulationInterface = \
+            self.__factory.get_representative(SongsJsonManipulationInterface)(
+                [], 
+                self.__absolute_path
+            )
+
+        self.__play_song_class : SongsConfigureInterface = \
+            self.__factory.get_representative(SongsConfigureInterface)(
+                self.__absolute_path,
+                self.__get_songs_class,
+                self.__multi_thread
+            )
+
         self.__app.exec()
 
     def load_ui(self, ui_file : str) -> Type[QWidget]:
@@ -81,20 +94,7 @@ class App():
 
         horizontal_layout = QHBoxLayout()
 
-        get_songs_class : SongsJsonManipulationInterface = \
-            self.__factory.get_representative(SongsJsonManipulationInterface)(
-                [], 
-                self.__absolute_path
-            )
-
-        play_song_class : SongsConfigureInterface = \
-            self.__factory.get_representative(SongsConfigureInterface)(
-                self.__absolute_path,
-                get_songs_class,
-                self.__multi_thread
-            )
-
-        songs = (*get_songs_class.get_songs(), )
+        songs = (*self.__get_songs_class.get_songs(), )
 
         for i, song in enumerate(songs):
 
@@ -104,7 +104,7 @@ class App():
                     song_name = song[1],
                     short_cuts = ['1', '2', '3', '4', '5'],
                     window = scroll_area_widget,
-                    play_song = play_song_class
+                    play_song = self.__play_song_class
                 )
 
             card = card_song_class.create_card_song()
