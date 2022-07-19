@@ -79,10 +79,12 @@ class CardSong(CardSongInterface):
 
     def play_sound_event_button(self, id: str, button : Type[QPushButton]) -> None:
         button_text = button.text()
+
         print(f'Play Song card : {id}')
         if button_text == 'Play':
-            self.__play_song.play_song(id, False)
+            thread_id = self.__play_song.play_song(id)
+            button.setAccessibleName(str(thread_id))
             button.setText('Stop')
         else:
-            self.__play_song.stop_song()
+            self.__play_song.stop_song(int(button.accessibleName()))
             button.setText('Play')
