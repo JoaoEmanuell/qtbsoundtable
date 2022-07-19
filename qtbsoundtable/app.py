@@ -1,6 +1,8 @@
 from typing import Type, List
 from pathlib import Path
 from os.path import join, exists
+from json import load
+from json.decoder import JSONDecodeError
 
 from PySide6.QtWidgets import (QApplication, QWidget, QFileDialog, 
 QHBoxLayout, QScrollArea)
@@ -16,7 +18,7 @@ from source.songs_configure import SongsConfigureInterface
 from source.multi_thread import MultiThreadInterface
 
 class App():
-    def __init__(self, factory : Type[FactoryInterface]) -> None:
+    def __init__(self, factory: Type[FactoryInterface]) -> None:
         
         self.__app = QApplication([])
         self.__factory = factory()
@@ -38,7 +40,7 @@ class App():
         self.__multi_thread : MultiThreadInterface = \
             self.__factory.get_representative(MultiThreadInterface)
 
-        if not exists(join(self.__absolute_path, 'songs.json')):
+        if not self.__verify_songs_json():
             self.__add_form.show()
         else:
             self.load_songs_in_screen()
@@ -126,6 +128,22 @@ class App():
 
     def play_song(self) -> None:
         pass
+
+    def __verify_songs_json(self) -> bool:
+        # Verify songs json integrity
+        # If integrity return True, else return False
+        songs_json_path = join(self.__absolute_path, 'songs.json')
+
+        if exists(songs_json_path):
+            try:
+                with open(songs_json_path, 'r') as file:
+                    json = load(file)
+                    json['songs']
+                    return True
+            except (JSONDecodeError, KeyError):
+                return False
+        else:
+            return False
 
 if __name__ == '__main__':
     App(Factory)
