@@ -5,9 +5,11 @@ from json import load
 from json.decoder import JSONDecodeError
 
 from PySide6.QtWidgets import (QApplication, QWidget, QFileDialog, 
-QHBoxLayout, QScrollArea)
+QHBoxLayout, QScrollArea, QPushButton)
 from PySide6.QtUiTools import QUiLoader
 from PySide6.QtCore import QFile
+from pydub import AudioSegment
+from pydub.playback import play
 
 from source import Factory
 
@@ -32,7 +34,9 @@ class App():
         # Main form
 
         self.__main_form = self.load_ui('main.ui')
-        self.__main_form.playSongsButton.clicked.connect(self.play_song)
+        self.__main_form.playSongsButton.clicked.connect(
+            lambda: self.play_song_button(self.__main_form.playSongsButton)
+        )
         self.__main_form.actionAddSounds.triggered.connect(self.__add_songs)
 
         # Class
@@ -58,6 +62,13 @@ class App():
                 self.__get_songs_class,
                 self.__multi_thread
             )
+
+        # Variables
+        self.__play_songs_thread_id : int = self.__multi_thread.create_thread(
+            self.__play_songs,
+            (self.__get_songs_class, ),
+            automatic_start=False
+        )
 
         if not self.__verify_songs_json():
             self.__add_form.show()
@@ -132,8 +143,30 @@ class App():
         horizontal_layout_widget.setLayout(horizontal_layout)
         return horizontal_layout_widget
 
-    def play_song(self) -> None:
-        pass
+    def play_song_button(self, button: Type[QPushButton]) -> None:
+        button_text = button.text()
+
+        if button_text == 'Tocar sons':
+
+            self.__multi_thread.start_thread(self.__play_songs_thread_id)
+
+            button.setText('Parar sons')
+
+        else:
+
+            self.__multi_thread.stop_thread(self.__play_songs_thread_id)
+
+            button.setText('Tocar sons')
+
+    def __play_songs(self, songs_json: Type[SongsJsonManipulationInterface]) \
+        -> None:
+        # Play all songs in songs.json
+        songs = songs_json.get_songs()
+        for song in songs:
+            file = AudioSegment.from_file(
+                songs_json.get_song(song[0]) # Get the absolute path
+            )
+            play(file)
 
     def __verify_songs_json(self) -> bool:
         # Verify songs json integrity
