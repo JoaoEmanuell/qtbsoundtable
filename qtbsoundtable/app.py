@@ -163,10 +163,13 @@ class App():
         # Play all songs in songs.json
         songs = songs_json.get_songs()
         for song in songs:
-            file = AudioSegment.from_file(
-                songs_json.get_song(song[0]) # Get the absolute path
-            )
-            play(file)
+            try:
+                file = AudioSegment.from_file(
+                    songs_json.get_song(song[0]) # Get the absolute path
+                )
+                play(file)
+            except FileNotFoundError:
+                pass
 
     def __verify_songs_json(self) -> bool:
         # Verify songs json integrity
