@@ -140,5 +140,6 @@ backlog.md
 
 songs/
 tmp*
+.tmp*
 songs.json
 .qt_for_python/
