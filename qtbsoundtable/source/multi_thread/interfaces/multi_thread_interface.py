@@ -17,6 +17,7 @@ class MultiThreadInterface(ABC):
         """        
         raise NotImplementedError()
 
+    @abstractmethod
     def create_thread(
         self, 
         target: Callable=None,
@@ -41,6 +42,7 @@ class MultiThreadInterface(ABC):
         raise NotImplementedError()
         raise MultiThreadErrorInterface()
 
+    @abstractmethod
     def delete_thread(self, id: int) -> None:
         """Delete Thread
 
@@ -50,6 +52,7 @@ class MultiThreadInterface(ABC):
         """        
         raise NotImplementedError()
 
+    @abstractmethod
     def start_thread(self, id: int) -> None:
         """Start Thread, case the thread be running, restart the thread
 
@@ -62,6 +65,7 @@ class MultiThreadInterface(ABC):
         raise NotImplementedError()
         raise MultiThreadErrorInterface()
 
+    @abstractmethod
     def stop_thread(self, id: int) -> None:
         """Stop Thread
 
@@ -74,6 +78,7 @@ class MultiThreadInterface(ABC):
         raise NotImplementedError()
         raise MultiThreadErrorInterface()
 
+    @abstractmethod
     def is_alive(self, id: int) -> bool:
         """Is Thread Alive
 
@@ -88,3 +93,9 @@ class MultiThreadInterface(ABC):
         """        
         raise NotImplementedError()
         raise MultiThreadErrorInterface()
+
+    @abstractmethod
+    def stop_all_threads(self) -> None:
+        """Stop All Threads
+        """        
+        raise NotImplementedError()
