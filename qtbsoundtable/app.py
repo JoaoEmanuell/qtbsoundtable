@@ -20,10 +20,13 @@ from source.songs_configure import SongsConfigureInterface
 from source.multi_thread import MultiThreadInterface
 
 class App():
-    def __init__(self, factory: Type[FactoryInterface]) -> None:
+    def __init__(
+        self, 
+        factory: Type[FactoryInterface], 
+        multi_thread: Type[MultiThreadInterface]) -> None:
         
         self.__app = QApplication([])
-        self.__factory = factory()
+        self.__factory = factory
         self.__absolute_path = Path().absolute()
 
         # Add form
@@ -43,8 +46,7 @@ class App():
 
         # Multi Thread
 
-        self.__multi_thread : MultiThreadInterface = \
-            self.__factory.get_representative(MultiThreadInterface)
+        self.__multi_thread = multi_thread
 
         # Get songs
 
@@ -188,4 +190,10 @@ class App():
             return False
 
 if __name__ == '__main__':
-    App(Factory)
+    fac = Factory()
+    multi_thread : MultiThreadInterface = \
+        fac.get_representative(MultiThreadInterface)
+
+    App(fac, multi_thread)
+    
+    multi_thread.stop_all_threads()
