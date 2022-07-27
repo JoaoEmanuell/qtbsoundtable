@@ -45,6 +45,7 @@ class MultiThread(MultiThreadInterface):
             if self.private__verify_running_threads_number() == \
                 self.__thread_number_limit:
 
+                print("Alert: Max Threads Reached!!!")
                 self.stop_all_threads()
                 raise self.__error_class("Limit of Threads reached")
 
@@ -83,7 +84,7 @@ class MultiThread(MultiThreadInterface):
         return number
 
     def stop_all_threads(self) -> None:
-        print("Alert: Max Threads Reached!!!\nStop all threads!!!")
+        print("Stop all threads!!!")
         while True:
 
             if self.private__verify_running_threads_number() == 1:
