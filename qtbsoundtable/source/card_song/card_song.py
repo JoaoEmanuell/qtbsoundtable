@@ -2,6 +2,7 @@ from typing import List, Type
 from PySide6.QtWidgets import (QWidget, QGridLayout, QLabel, QPushButton, 
 QComboBox, QMainWindow, QFrame)
 from PySide6.QtCore import QRect
+from PySide6.QtGui import QKeySequence
 
 from .interfaces import CardSongInterface
 from ..songs_configure.interfaces import SongsConfigureInterface
@@ -51,7 +52,7 @@ class CardSong(CardSongInterface):
         play_button = QPushButton(gridFrame)
         play_button.setText(r"Play")
         play_button.clicked.connect(
-            lambda: self.play_sound_event_button(self.__id, play_button) 
+            lambda: self.play_sound_event_button(self.__id, play_button, comboBox) 
             # Pass parameters for play_song
         )
 
@@ -77,7 +78,10 @@ class CardSong(CardSongInterface):
                 "}")
         return qss
 
-    def play_sound_event_button(self, id: str, button : Type[QPushButton]) -> None:
+    def play_sound_event_button(self, id: str, 
+        button: Type[QPushButton], 
+        combo_box: Type[QComboBox]) -> None:
+
         button_text = button.text()
 
         print(f'Play Song card : {id}')
@@ -88,3 +92,15 @@ class CardSong(CardSongInterface):
         else:
             self.__play_song.stop_song(int(button.accessibleName()))
             button.setText('Play')
+
+        self.set_shortcut_in_button(button, combo_box)
+
+    def set_shortcut_in_button(
+        self, 
+        button: Type[QPushButton], 
+        combo_box: Type[QComboBox]) -> None:
+
+            short_cut_text = combo_box.currentText()
+
+            if short_cut_text != '':
+                button.setShortcut(QKeySequence(short_cut_text))
