@@ -49,11 +49,12 @@ class SongsJsonManipulationInterface(ABC):
         raise FileNotFoundError()
 
     @abstractmethod
-    def set_short_cut(self, id: str) -> None:
+    def set_short_cut(self, id: str, short_cut: str) -> None:
         """Set shortcut the song
 
         Args:
             id (str): Id from song, get this information in songs.json
+            short_cut (str): New short cut
 
         Raises:
             FileNotFoundError: Case the song not exists

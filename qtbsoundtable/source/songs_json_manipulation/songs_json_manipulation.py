@@ -97,8 +97,29 @@ class SongsJsonManipulation(SongsJsonManipulationInterface):
 
                 return song_path
 
-    def set_short_cut(self, id: str) -> None:
-        pass
+    def set_short_cut(self, id: str, short_cut: str) -> None:
+        songs = self.get_songs()
+        
+        for pos, song in enumerate(songs):
+            if song[0] == int(id):
+                song[2] = short_cut
+                songs[pos] = song
+                self.private__write_short_cut_on_json(songs)
+                break
+
+    def private__write_short_cut_on_json(
+        self, songs: List[List[Union[int, str, bool]]]) -> None:
+        # Write the shortcut in json, use with set_short_cut
+        
+        with open(self.__json_path, 'w') as file:
+            json = {
+                'songs': songs
+            }
+            file.write(dumps(json))
     
     def get_short_cut(self, id: str) -> str:
-        pass
+        songs = self.get_songs()
+        
+        for song in songs:
+            if song[0] == int(id):
+                return song[2]
