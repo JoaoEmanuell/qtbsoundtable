@@ -18,3 +18,10 @@ def test_answer():
     json = add_songs.get_songs()
     assert type(json) == list
     assert json[0][0] == 0
+
+    add_songs.set_short_cut('0', 'Ctrl+1')
+    song_short_cut = add_songs.get_short_cut('0')
+    assert song_short_cut == 'Ctrl+1'
+
+if __name__ == '__main__':
+    test_answer()
