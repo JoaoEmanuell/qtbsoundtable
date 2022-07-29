@@ -11,21 +11,20 @@ class SongsJsonManipulation(SongsJsonManipulationInterface):
     def __init__(self, paths: List[str]=[], absolute_path: str='') -> None:
         self.__paths = (*paths, )
         self.__absolute_path = absolute_path
+        self.__json_path = join(self.__absolute_path, 'songs.json')
 
     def add_songs(self) -> None:
-
         path = join(self.__absolute_path, 'songs', '')
-        json_path = join(self.__absolute_path, 'songs.json')
 
         if not exists(path):
             mkdir(path)
 
-        if not exists(json_path):
-            open(json_path, 'w').close()
+        if not exists(self.__json_path):
+            open(self.__json_path, 'w').close()
 
         songs_to_add : List[List[str]] = []
         
-        id = self.private__get_last_id_json(json_path) + 1
+        id = self.private__get_last_id_json() + 1
 
         for song in self.__paths:
             copy(song, path)
@@ -39,20 +38,17 @@ class SongsJsonManipulation(SongsJsonManipulationInterface):
             )
             id += 1
 
-        self.private__write_json(json_path, songs_to_add)
+        self.private__write_json(songs_to_add)
 
-    def private__write_json(
-        self, 
-        json_path : str, 
-        songs_to_add : List[List[str]]) -> None:
+    def private__write_json(self, songs_to_add : List[List[str]]) -> None:
 
-        with open(json_path, 'r') as f:
+        with open(self.__json_path, 'r') as f:
             try:
                 original_json : dict = load(f)
             except JSONDecodeError:
                 original_json = {'songs': []}
 
-        with open(json_path, 'w') as f:
+        with open(self.__json_path, 'w') as f:
 
             original_songs : List[
                 List[str]
@@ -70,9 +66,9 @@ class SongsJsonManipulation(SongsJsonManipulationInterface):
 
             f.write(dumps(new_json))
 
-    def private__get_last_id_json(self, json_path: str) -> int:
+    def private__get_last_id_json(self) -> int:
         # Get last id to add id in json
-        with open(json_path, 'r') as f:
+        with open(self.__json_path, 'r') as f:
             try:
                 original_json : dict = load(f)
             except JSONDecodeError:
@@ -81,12 +77,10 @@ class SongsJsonManipulation(SongsJsonManipulationInterface):
             return len(original_json["songs"]) - 1
 
     def get_songs(self) -> List[List[Union[int, str, bool]]]:
-        songs_path = join(self.__absolute_path, 'songs.json')
-
-        if not exists(songs_path):
+        if not exists(self.__json_path):
             raise FileNotFoundError("songs.json not found")
 
-        with open(songs_path, 'r') as file:
+        with open(self.__json_path, 'r') as file:
             json : Dict[str, List] = load(file)
             return json['songs']
 
@@ -96,9 +90,15 @@ class SongsJsonManipulation(SongsJsonManipulationInterface):
         for song in songs:
 
             if song[0] == int(id):
-                song_path = str(join(self.__absolute_path, 'songs', song[1]))
+                song_path = str(join(self.__json_path, song[1]))
 
                 if not exists(song_path):
                     raise FileNotFoundError("Song not found")
 
                 return song_path
+
+    def set_short_cut(self, id: str) -> None:
+        pass
+    
+    def get_short_cut(self, id: str) -> str:
+        pass
