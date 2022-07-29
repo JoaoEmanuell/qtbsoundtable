@@ -47,3 +47,32 @@ class SongsJsonManipulationInterface(ABC):
         """        
         raise NotImplementedError()
         raise FileNotFoundError()
+
+    @abstractmethod
+    def set_short_cut(self, id: str) -> None:
+        """Set shortcut the song
+
+        Args:
+            id (str): Id from song, get this information in songs.json
+
+        Raises:
+            FileNotFoundError: Case the song not exists
+        """        
+        raise NotImplementedError()
+        raise FileNotFoundError()
+
+    @abstractmethod
+    def get_short_cut(self, id: str) -> str:
+        """Get shortcut of the song
+
+        Args:
+            id (str): Id from song, get this information in songs.json
+
+        Raises:
+            FileNotFoundError: Case the song not exists
+
+        Returns:
+            str: Actual shortcut of the song
+        """        
+        raise NotImplementedError()
+        raise FileNotFoundError()
