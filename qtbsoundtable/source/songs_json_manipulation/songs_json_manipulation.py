@@ -86,11 +86,14 @@ class SongsJsonManipulation(SongsJsonManipulationInterface):
 
     def get_song(self, id: str) -> str:
         songs = self.get_songs()
+        print(songs)
 
         for song in songs:
+            print(song)
 
             if song[0] == int(id):
-                song_path = str(join(self.__json_path, song[1]))
+                song_path = str(join(self.__absolute_path, 'songs', song[1]))
+                print(song_path)
 
                 if not exists(song_path):
                     raise FileNotFoundError("Song not found")
