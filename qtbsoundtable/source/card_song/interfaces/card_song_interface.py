@@ -3,12 +3,14 @@ from typing import Type, List
 from PySide6.QtWidgets import QFrame, QMainWindow, QPushButton, QComboBox
 
 from ...songs_configure.interfaces import SongsConfigureInterface
+from ...songs_json_manipulation import SongsJsonManipulationInterface
 
 class CardSongInterface(ABC):
     @abstractmethod
     def __init__(self, id : int, song_name : str, \
         short_cuts : List[str], window : Type[QMainWindow],
         play_song: Type[SongsConfigureInterface],
+        json_manipulation: Type[SongsJsonManipulationInterface]
         ) -> None:
         """Init
 

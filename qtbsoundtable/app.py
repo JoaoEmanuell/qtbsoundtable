@@ -121,9 +121,12 @@ class App():
                 self.__factory.get_representative(CardSongInterface)(
                     id = song[0], 
                     song_name = song[1],
-                    short_cuts = ['1', '2', '3', '4', '5'],
+                    short_cuts = [
+                        '', '1', '2', '3', '4', '5', '6', '7', '8', '9', '0'
+                    ],
                     window = scroll_area_widget,
-                    play_song = self.__play_song_class
+                    play_song = self.__play_song_class,
+                    json_manipulation = self.__get_songs_class
                 )
 
             card = card_song_class.create_card_song()
@@ -195,5 +198,4 @@ if __name__ == '__main__':
         fac.get_representative(MultiThreadInterface)
 
     App(fac, multi_thread)
-    
     multi_thread.stop_all_threads()
